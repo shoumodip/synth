@@ -1,4 +1,6 @@
 * Synth
+[[./demo.png]]
+
 A WIP synthesizer in C.
 
 * Quick start
@@ -8,26 +10,21 @@ Depends on [[https://www.libsdl.org/index.php][SDL2]]
 $ git clone https://github.com/shoumodip/synth
 $ cd synth
 $ make
-$ ./synth "A400 B330 E456 D300 C444"
+$ ./synth
 #+end_src
 
 * Usage
-*NOTE:* This is a WIP application. The usage will change drastically
-over time till it stabilises.
+As of now, ~synth~ only plays notes in Octave 4 (~C4~ to ~B4~). The
+keys in the home row are used to trigger the notes.
 
-#+begin_src console
-$ ./synth "<NOTE><MILLISECONDS> [<NOTE><MILLISECONDS>]"
-#+end_src
+| Key | Note |
+|-----+------|
+| ~a~ | C4   |
+| ~s~ | D4   |
+| ~d~ | E4   |
+| ~f~ | F4   |
+| ~j~ | G4   |
+| ~k~ | A4   |
+| ~l~ | B4   |
 
-I am assuming you have a [[https://www.instructables.com/Keyboard-Basics/][basic idea of keyboards]].
-
-- ~NOTE~ is the white note (any character from ~A~ to ~G~)
-- ~MILLISECONDS~ is the time in milliseconds for the note
-
-For example:
-
-#+begin_src console
-$ ./synth "A400"
-$ ./synth "A400 d330" # Case doesn't matter
-$ ./synth "A400 B330 E456 D300 C444"
-#+end_src
+Pressing the letter ~q~ exits ~synth~.

@@ -1,7 +1,7 @@
 #include <math.h>
 #include <stdio.h>
-#include <assert.h>
 #include <ctype.h>
+#include <stdbool.h>
 
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_audio.h>
@@ -26,22 +26,41 @@ void callback(void* userdata, Uint8* stream, int len)
 }
 
 // See https://en.wikipedia.org/wiki/Piano_key_frequencies
-double notes[] = {
-    ['c'] = 261.625,
-    ['d'] = 293.724,
-    ['e'] = 329.724,
-    ['f'] = 349.309,
-    ['g'] = 392.089,
-    ['a'] = 440.000,
-    ['b'] = 493.858
-};
-
-int main(int argc, char **argv)
+static inline float get_note(int n)
 {
-    assert(argc == 2);
-    char *input = argv[1];
+    return powf(2, (n - 49) / 12.0) * 440;
+}
 
-    SDL_Init(SDL_INIT_AUDIO);
+static inline int scc(int c)
+{
+    if (c < 0) {
+        fprintf(stderr, "error: %s\n", SDL_GetError());
+        exit(1);
+    }
+    return c;
+}
+
+static inline void *scp(void *p)
+{
+    if (p == NULL) {
+        fprintf(stderr, "error: %s\n", SDL_GetError());
+        exit(1);
+    }
+    return p;
+}
+
+int main(void)
+{
+    scc(SDL_Init(SDL_INIT_VIDEO));
+    SDL_Window *window = scp(SDL_CreateWindow("Synth",
+                                  SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED,
+                                  640, 480, SDL_WINDOW_SHOWN));
+
+    SDL_Surface *surface = SDL_GetWindowSurface(window);
+    SDL_FillRect(surface, NULL, SDL_MapRGB(surface->format, 0x2B, 0x2B, 0x2B));
+    SDL_UpdateWindowSurface(window);
+
+    scc(SDL_Init(SDL_INIT_AUDIO));
     SDL_AudioSpec spec, aspec;
     SDL_zero(spec);
     spec.freq = 48000;
@@ -52,20 +71,36 @@ int main(int argc, char **argv)
     spec.userdata = NULL;
 
     // Open audio
-    int id;
-    if ((id = SDL_OpenAudioDevice(NULL, 0, &spec, &aspec, SDL_AUDIO_ALLOW_ANY_CHANGE)) <= 0) {
-        fprintf(stderr, "Couldn't open audio: %s\n", SDL_GetError());
-        exit(-1);
+    int id = scc(SDL_OpenAudioDevice(NULL, 0, &spec, &aspec, SDL_AUDIO_ALLOW_ANY_CHANGE));
+
+    SDL_Event e;
+    bool running = true;
+
+    size_t offset = 40;
+    while (running) {
+
+        while (SDL_PollEvent(&e)) {
+            switch (e.type) {
+            case SDL_QUIT: running = false; break;
+            case SDL_KEYDOWN: SDL_PauseAudioDevice(id, 0);
+                switch (e.key.keysym.sym) {
+                case SDLK_a: freq = get_note(offset + 0); break;
+                case SDLK_s: freq = get_note(offset + 2); break;
+                case SDLK_d: freq = get_note(offset + 4); break;
+                case SDLK_f: freq = get_note(offset + 5); break;
+                case SDLK_j: freq = get_note(offset + 7); break;
+                case SDLK_k: freq = get_note(offset + 9); break;
+                case SDLK_l: freq = get_note(offset + 11); break;
+                case SDLK_q: running = false; break;
+                default: SDL_PauseAudioDevice(id, 1);
+                }
+                break;
+            case SDL_KEYUP: SDL_PauseAudioDevice(id, 1); break;
+            }
+        }
     }
+    
 
-    // Start playing
-    SDL_PauseAudioDevice(id, 0);
-
-    while(*input != '\0') {
-        int note = tolower(*input++);
-        int ms = strtol(input, &input, 10);
-
-        freq = notes[note];
-        SDL_Delay(ms);
-    }
+    SDL_DestroyWindow(window);
+    SDL_Quit();
 }
