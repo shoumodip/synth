@@ -76,7 +76,7 @@ int main(void)
     SDL_Event e;
     bool running = true;
 
-    size_t offset = 40;
+    size_t octave = 40;
     while (running) {
 
         while (SDL_PollEvent(&e)) {
@@ -84,13 +84,30 @@ int main(void)
             case SDL_QUIT: running = false; break;
             case SDL_KEYDOWN: SDL_PauseAudioDevice(id, 0);
                 switch (e.key.keysym.sym) {
-                case SDLK_a: freq = get_note(offset + 0); break;
-                case SDLK_s: freq = get_note(offset + 2); break;
-                case SDLK_d: freq = get_note(offset + 4); break;
-                case SDLK_f: freq = get_note(offset + 5); break;
-                case SDLK_j: freq = get_note(offset + 7); break;
-                case SDLK_k: freq = get_note(offset + 9); break;
-                case SDLK_l: freq = get_note(offset + 11); break;
+                case SDLK_a: freq = get_note(octave + 0); break;
+                case SDLK_w: freq = get_note(octave + 1); break;
+                case SDLK_s: freq = get_note(octave + 2); break;
+                case SDLK_e: freq = get_note(octave + 3); break;
+                case SDLK_d: freq = get_note(octave + 4); break;
+                case SDLK_f: freq = get_note(octave + 5); break;
+                case SDLK_u: freq = get_note(octave + 6); break;
+                case SDLK_j: freq = get_note(octave + 7); break;
+                case SDLK_i: freq = get_note(octave + 8); break;
+                case SDLK_k: freq = get_note(octave + 9); break;
+                case SDLK_o: freq = get_note(octave + 10); break;
+                case SDLK_l: freq = get_note(octave + 11); break;
+
+                case SDLK_0: octave = 0; break;
+                case SDLK_1: octave = 10; break;
+                case SDLK_2: octave = 20; break;
+                case SDLK_3: octave = 30; break;
+                case SDLK_4: octave = 40; break;
+                case SDLK_5: octave = 50; break;
+                case SDLK_6: octave = 60; break;
+                case SDLK_7: octave = 70; break;
+                case SDLK_8: octave = 80; break;
+                case SDLK_9: octave = 90; break;
+
                 case SDLK_q: running = false; break;
                 default: SDL_PauseAudioDevice(id, 1);
                 }

@@ -14,9 +14,9 @@ $ ./synth
 #+end_src
 
 * Usage
-As of now, ~synth~ only plays notes in Octave 4 (~C4~ to ~B4~). The
-keys in the home row are used to trigger the notes.
+Pressing the key ~q~ exits ~synth~.
 
+** White Notes
 | Key | Note |
 |-----+------|
 | ~a~ | C4   |
@@ -27,4 +27,25 @@ keys in the home row are used to trigger the notes.
 | ~k~ | A4   |
 | ~l~ | B4   |
 
-Pressing the letter ~q~ exits ~synth~.
+** Black Notes
+| Key | Note |
+|-----+------|
+| ~w~ | C#   |
+| ~e~ | E'   |
+| ~u~ | F#   |
+| ~i~ | A'   |
+| ~o~ | B'   |
+
+** Octaves
+| Key | Octave |
+|-----+--------|
+| ~0~ |      0 |
+| ~1~ |      1 |
+| ~2~ |      2 |
+| ~3~ |      3 |
+| ~4~ |      4 |
+| ~5~ |      5 |
+| ~6~ |      6 |
+| ~7~ |      7 |
+| ~8~ |      8 |
+| ~9~ |      9 |
