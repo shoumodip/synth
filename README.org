@@ -16,26 +16,6 @@ $ ./synth
 * Usage
 Pressing the key ~q~ exits ~synth~.
 
-** White Notes
-| Key | Note |
-|-----+------|
-| ~a~ | C4   |
-| ~s~ | D4   |
-| ~d~ | E4   |
-| ~f~ | F4   |
-| ~j~ | G4   |
-| ~k~ | A4   |
-| ~l~ | B4   |
-
-** Black Notes
-| Key | Note |
-|-----+------|
-| ~w~ | C#   |
-| ~e~ | E'   |
-| ~u~ | F#   |
-| ~i~ | A'   |
-| ~o~ | B'   |
-
 ** Octaves
 | Key | Octave |
 |-----+--------|
@@ -48,4 +28,26 @@ Pressing the key ~q~ exits ~synth~.
 | ~6~ |      6 |
 | ~7~ |      7 |
 | ~8~ |      8 |
-| ~9~ |      9 |
+
+** White Notes
+~o~ is the octave here.
+
+| Key | Note       |
+|-----+------------|
+| ~a~ | C(~o~)     |
+| ~s~ | D(~o~)     |
+| ~d~ | E(~o~)     |
+| ~f~ | F(~o~)     |
+| ~j~ | G(~o~)     |
+| ~k~ | A(~o~)     |
+| ~l~ | B(~o~)     |
+| ~;~ | C(~o + 1~) |
+
+** Black Notes
+| Key | Note    |
+|-----+---------|
+| ~w~ | C#(~o~) |
+| ~e~ | E'(~o~) |
+| ~u~ | F#(~o~) |
+| ~i~ | A'(~o~) |
+| ~o~ | B'(~o~) |

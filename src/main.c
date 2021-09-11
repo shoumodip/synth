@@ -31,6 +31,11 @@ static inline float get_note(int n)
     return powf(2, (n - 49) / 12.0) * 440;
 }
 
+static inline float pos(float a)
+{
+    return (a > 0.0) ? a : 0.0;
+}
+
 static inline int scc(int c)
 {
     if (c < 0) {
@@ -76,37 +81,87 @@ int main(void)
     SDL_Event e;
     bool running = true;
 
-    size_t octave = 40;
+    int octave = 40;            // Default in the fourth octave
     while (running) {
-
         while (SDL_PollEvent(&e)) {
             switch (e.type) {
             case SDL_QUIT: running = false; break;
-            case SDL_KEYDOWN: SDL_PauseAudioDevice(id, 0);
+            case SDL_KEYDOWN:
                 switch (e.key.keysym.sym) {
-                case SDLK_a: freq = get_note(octave + 0); break;
-                case SDLK_w: freq = get_note(octave + 1); break;
-                case SDLK_s: freq = get_note(octave + 2); break;
-                case SDLK_e: freq = get_note(octave + 3); break;
-                case SDLK_d: freq = get_note(octave + 4); break;
-                case SDLK_f: freq = get_note(octave + 5); break;
-                case SDLK_u: freq = get_note(octave + 6); break;
-                case SDLK_j: freq = get_note(octave + 7); break;
-                case SDLK_i: freq = get_note(octave + 8); break;
-                case SDLK_k: freq = get_note(octave + 9); break;
-                case SDLK_o: freq = get_note(octave + 10); break;
-                case SDLK_l: freq = get_note(octave + 11); break;
+                case SDLK_a: // C
+                    freq = pos(get_note(octave + 0));
+                    SDL_PauseAudioDevice(id, 0);
+                    break;
 
-                case SDLK_0: octave = 0; break;
-                case SDLK_1: octave = 10; break;
-                case SDLK_2: octave = 20; break;
-                case SDLK_3: octave = 30; break;
+                case SDLK_w: // C#
+                    freq = pos(get_note(octave + 1));
+                    SDL_PauseAudioDevice(id, 0);
+                    break;
+
+                case SDLK_s: // D
+                    freq = pos(get_note(octave + 2));
+                    SDL_PauseAudioDevice(id, 0);
+                    break;
+
+                case SDLK_e: // E'
+                    freq = pos(get_note(octave + 3));
+                    SDL_PauseAudioDevice(id, 0);
+                    break;
+
+                case SDLK_d: // E
+                    freq = pos(get_note(octave + 4));
+                    SDL_PauseAudioDevice(id, 0);
+                    break;
+
+                case SDLK_f: // F
+                    freq = pos(get_note(octave + 5));
+                    SDL_PauseAudioDevice(id, 0);
+                    break;
+
+                case SDLK_u: // F#
+                    freq = pos(get_note(octave + 6));
+                    SDL_PauseAudioDevice(id, 0);
+                    break;
+
+                case SDLK_j: // G
+                    freq = pos(get_note(octave + 7));
+                    SDL_PauseAudioDevice(id, 0);
+                    break;
+
+                case SDLK_i: // A'
+                    freq = pos(get_note(octave + 8));
+                    SDL_PauseAudioDevice(id, 0);
+                    break;
+
+                case SDLK_k: // A
+                    freq = pos(get_note(octave + 9));
+                    SDL_PauseAudioDevice(id, 0);
+                    break;
+
+                case SDLK_o: // B'
+                    freq = pos(get_note(octave + 10));
+                    SDL_PauseAudioDevice(id, 0);
+                    break;
+
+                case SDLK_l: // B
+                    freq = pos(get_note(octave + 11));
+                    SDL_PauseAudioDevice(id, 0);
+                    break;
+
+                case SDLK_SEMICOLON: // C+
+                    freq = pos(get_note(octave + 12));
+                    SDL_PauseAudioDevice(id, 0);
+                    break;
+
+                case SDLK_0: octave = -8; break;
+                case SDLK_1: octave = 4; break;
+                case SDLK_2: octave = 16; break;
+                case SDLK_3: octave = 28; break;
                 case SDLK_4: octave = 40; break;
-                case SDLK_5: octave = 50; break;
-                case SDLK_6: octave = 60; break;
-                case SDLK_7: octave = 70; break;
-                case SDLK_8: octave = 80; break;
-                case SDLK_9: octave = 90; break;
+                case SDLK_5: octave = 52; break;
+                case SDLK_6: octave = 64; break;
+                case SDLK_7: octave = 76; break;
+                case SDLK_8: octave = 88; break;
 
                 case SDLK_q: running = false; break;
                 default: SDL_PauseAudioDevice(id, 1);
@@ -116,7 +171,7 @@ int main(void)
             }
         }
     }
-    
+
 
     SDL_DestroyWindow(window);
     SDL_Quit();
