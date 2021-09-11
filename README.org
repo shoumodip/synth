@@ -14,40 +14,30 @@ $ ./synth
 #+end_src
 
 * Usage
-Pressing the key ~q~ exits ~synth~.
-
-** Octaves
-| Key | Octave |
-|-----+--------|
-| ~0~ |      0 |
-| ~1~ |      1 |
-| ~2~ |      2 |
-| ~3~ |      3 |
-| ~4~ |      4 |
-| ~5~ |      5 |
-| ~6~ |      6 |
-| ~7~ |      7 |
-| ~8~ |      8 |
+- Pressing ~q~ exits ~synth~
+- Pressing ~0-8~ switches to octave ~0-8~
 
 ** White Notes
 ~o~ is the octave here.
 
-| Key | Note       |
-|-----+------------|
-| ~a~ | C(~o~)     |
-| ~s~ | D(~o~)     |
-| ~d~ | E(~o~)     |
-| ~f~ | F(~o~)     |
-| ~j~ | G(~o~)     |
-| ~k~ | A(~o~)     |
-| ~l~ | B(~o~)     |
-| ~;~ | C(~o + 1~) |
+| Key | Note     |
+|-----+----------|
+| ~a~ | C(o)     |
+| ~s~ | D(o)     |
+| ~d~ | E(o)     |
+| ~f~ | F(o)     |
+| ~j~ | G(o)     |
+| ~k~ | A(o)     |
+| ~l~ | B(o)     |
+| ~;~ | C(o + 1) |
 
 ** Black Notes
-| Key | Note    |
-|-----+---------|
-| ~w~ | C#(~o~) |
-| ~e~ | E'(~o~) |
-| ~u~ | F#(~o~) |
-| ~i~ | A'(~o~) |
-| ~o~ | B'(~o~) |
+~o~ is the octave here.
+
+| Key | Note  |
+|-----+-------|
+| ~w~ | C#(o) |
+| ~e~ | E'(o) |
+| ~u~ | F#(o) |
+| ~i~ | A'(o) |
+| ~o~ | B'(o) |
