@@ -6,7 +6,7 @@
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_audio.h>
 
-#define PI2 6.28318530718
+#define TAU 6.28318530718
 
 float time = 0;
 float freq = 440;
@@ -20,8 +20,8 @@ void callback(void* userdata, Uint8* stream, int len)
     len /= sizeof(*snd);
     for(int i = 0; i < len; i++) {
         snd[i] = 32000 * sin(time);
-        time += freq * PI2 / 48000.0;
-        if(time >= PI2) time -= PI2;
+        time += freq * TAU / 48000.0;
+        if(time >= TAU) time -= TAU;
     }
 }
 
