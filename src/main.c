@@ -1,15 +1,20 @@
 #include <math.h>
-#include <stdio.h>
+#include <time.h>
 #include <ctype.h>
+#include <stdio.h>
 #include <stdbool.h>
 
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_audio.h>
 
-#define TAU 6.28318530718
+#include "wav.h"
 
-float time = 0;
-float freq = 440;
+#define TAU 6.28318530718
+float SDLtime = 0;
+float freq = 0;
+
+#define OUTPUT_FILE_FMT "recording-%zu.wav"
+Wav wav = {0};
 
 /*
  * The callback for the sound wave in SDL2
@@ -25,10 +30,12 @@ void callback(void* userdata, Uint8* stream, int len)
 
     short *snd = (short *) stream;
     len /= sizeof(*snd);
-    for(int i = 0; i < len; i++) {
-        snd[i] = 32000 * sin(time);
-        time += freq * TAU / 48000.0;
-        if(time >= TAU) time -= TAU;
+    for (int i = 0; i < len; i++) {
+        snd[i] = 32000 * sin(SDLtime);
+        if (wav.file) write_sample(&wav, snd[i]);
+
+        SDLtime += freq * TAU / 48000.0;
+        if(SDLtime >= TAU) SDLtime -= TAU;
     }
 }
 
@@ -112,12 +119,26 @@ void update(SDL_Window *window, SDL_Surface *surface)
     SDL_UpdateWindowSurface(window);
 }
 
+/*
+ * End the current recording
+ *
+ * @param wav *Wav The wav context
+ * @param start time_t The starting time 
+ */
+void end_recording(Wav *wav, time_t start)
+{
+    size_t duration = time(NULL) - start + 1;
+    wav->samples = wav->freq * duration;
+    write_wav_hdr(wav);
+    fclose(wav->file);
+    wav->file = NULL;
+}
+
 int main(void)
 {
     // Initialize SDL
     scc(SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO));
 
-    // ----------------
     // Setup the window
     SDL_Window *window = scp(SDL_CreateWindow("Synth",
                                               SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED,
@@ -126,27 +147,33 @@ int main(void)
     SDL_Surface *surface = SDL_GetWindowSurface(window);
     update(window, surface);
 
-    // ----------------
+    // Setup the wav
+    wav.channels = 1;
+    wav.sample_bits = 16;
+    wav.freq = 44100;
+
     // Setup the audio
     SDL_AudioSpec spec, aspec;
     SDL_zero(spec);
-    spec.freq = 48000;
+    spec.freq = 44100;
     spec.format = AUDIO_S16SYS;
     spec.channels = 1;
     spec.samples = 4096;
     spec.callback = callback;
     spec.userdata = NULL;
 
-    int id = scc(SDL_OpenAudioDevice(NULL, 0, &spec, &aspec, SDL_AUDIO_ALLOW_ANY_CHANGE));
+    int id = scc(SDL_OpenAudioDevice(NULL, 0,
+                                     &spec, &aspec,
+                                     SDL_AUDIO_ALLOW_ANY_CHANGE));
+    SDL_PauseAudioDevice(id, 0);
 
-    // ---------------
     // The event loop
     int octave = 40;            // Default in the fourth octave
     bool down[13] = {0};        // The keys down
     bool play = false;          // Whether the sound is playing
-
     SDL_Event e;                // The event
     bool running = true;        // Whether the application is running
+    time_t start;
 
     while (running) {
         update(window, surface);
@@ -158,73 +185,61 @@ int main(void)
                 case 'a': // C
                     down[0] = true;
                     freq = normalize(get_freq(octave + 0));
-                    SDL_PauseAudioDevice(id, 0);
                     break;
 
                 case 'w': // C#
                     down[1] = true;
                     freq = normalize(get_freq(octave + 1));
-                    SDL_PauseAudioDevice(id, 0);
                     break;
 
                 case 's': // D
                     down[2] = true;
                     freq = normalize(get_freq(octave + 2));
-                    SDL_PauseAudioDevice(id, 0);
                     break;
 
                 case 'e': // D#
                     down[3] = true;
                     freq = normalize(get_freq(octave + 3));
-                    SDL_PauseAudioDevice(id, 0);
                     break;
 
                 case 'd': // E
                     down[4] = true;
                     freq = normalize(get_freq(octave + 4));
-                    SDL_PauseAudioDevice(id, 0);
                     break;
 
                 case 'f': // F
                     down[5] = true;
                     freq = normalize(get_freq(octave + 5));
-                    SDL_PauseAudioDevice(id, 0);
                     break;
 
                 case 'u': // F#
                     down[6] = true;
                     freq = normalize(get_freq(octave + 6));
-                    SDL_PauseAudioDevice(id, 0);
                     break;
 
                 case 'j': // G
                     down[7] = true;
                     freq = normalize(get_freq(octave + 7));
-                    SDL_PauseAudioDevice(id, 0);
                     break;
 
                 case 'i': // G#
                     down[8] = true;
                     freq = normalize(get_freq(octave + 8));
-                    SDL_PauseAudioDevice(id, 0);
                     break;
 
                 case 'k': // A
                     down[9] = true;
                     freq = normalize(get_freq(octave + 9));
-                    SDL_PauseAudioDevice(id, 0);
                     break;
 
                 case 'o': // A#
                     down[10] = true;
                     freq = normalize(get_freq(octave + 10));
-                    SDL_PauseAudioDevice(id, 0);
                     break;
 
                 case 'l': // B
                     down[11] = true;
                     freq = normalize(get_freq(octave + 11));
-                    SDL_PauseAudioDevice(id, 0);
                     break;
 
                 case 'z': octave = -8; break;
@@ -237,7 +252,21 @@ int main(void)
                 case ',': octave = 76; break;
                 case '.': octave = 88; break;
 
-                case SDLK_q: running = false; break;
+                case 'q': // Quick the application
+                    running = false;
+                    break;
+
+                case 'r': // Toggle recording
+                    if (wav.file) {
+                        end_recording(&wav, start);
+                    } else {
+                        size_t length = snprintf(NULL, 0, OUTPUT_FILE_FMT, start);
+                        char output[length + 1];
+                        snprintf(output, length + 1, OUTPUT_FILE_FMT, start);
+
+                        wav.file = fopen(output, "wb");
+                        start = time(NULL);
+                    }
                 }
                 break;
 
@@ -263,10 +292,12 @@ int main(void)
             bool new = any(down, 13);
             if (play != new) {
                 play = new;
-                SDL_PauseAudioDevice(id, !play);
+                if (!play) freq = 0;
             }
         }
     }
+
+    if (wav.file) end_recording(&wav, start);
 
     SDL_DestroyWindow(window);
     SDL_CloseAudio();

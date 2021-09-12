@@ -17,9 +17,10 @@ $ ./synth
 ## Application
 The application keybindings
 
-| Key | Action                |
-| --- | --------------------- |
-| `q` | Quits the application |
+| Key | Action                 |
+| --- | ---------------------- |
+| `q` | Quits the application  |
+| `r` | Toggles recording mode |
 
 ## White Notes
 White notes are played using the home row.
