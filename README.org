@@ -14,30 +14,48 @@ $ ./synth
 #+end_src
 
 * Usage
-- Pressing ~q~ exits ~synth~
-- Pressing ~0-8~ switches to octave ~0-8~
-
 ** White Notes
-~o~ is the octave here.
+White notes are played using the home row.
 
-| Key | Note     |
-|-----+----------|
-| ~a~ | C(o)     |
-| ~s~ | D(o)     |
-| ~d~ | E(o)     |
-| ~f~ | F(o)     |
-| ~j~ | G(o)     |
-| ~k~ | A(o)     |
-| ~l~ | B(o)     |
-| ~;~ | C(o + 1) |
+| Key | Note |
+|-----+------|
+| ~a~ | C    |
+| ~s~ | D    |
+| ~d~ | E    |
+| ~f~ | F    |
+| ~j~ | G    |
+| ~k~ | A    |
+| ~l~ | B    |
 
 ** Black Notes
-~o~ is the octave here.
+Black notes are played using the top row.
 
-| Key | Note  |
-|-----+-------|
-| ~w~ | C#(o) |
-| ~e~ | E'(o) |
-| ~u~ | F#(o) |
-| ~i~ | A'(o) |
-| ~o~ | B'(o) |
+| Key | Note |
+|-----+------|
+| ~w~ | C#   |
+| ~e~ | D#   |
+| ~u~ | F#   |
+| ~i~ | G#   |
+| ~o~ | A#   |
+
+** Octaves
+The octave is selected using the bottom row.
+
+| Key | Octave |
+|-----+--------|
+| ~z~ |      0 |
+| ~x~ |      1 |
+| ~c~ |      2 |
+| ~v~ |      3 |
+| ~b~ |      4 |
+| ~n~ |      5 |
+| ~m~ |      6 |
+| ~ ̦~ |      7 |
+| ~.~ |      8 |
+
+** Application
+The application keybindings
+
+| Key | Action                |
+|-----+-----------------------|
+| ~q~ | Quits the application |
