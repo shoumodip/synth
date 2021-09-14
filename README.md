@@ -1,5 +1,5 @@
 # Synth
-![Demo](./demo.png)
+![Synth](./synth.png)
 
 A WIP synthesizer in C.
 
