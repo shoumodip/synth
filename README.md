@@ -1,7 +1,7 @@
 # Synth
 ![Synth](./synth.png)
 
-A WIP synthesizer in C.
+A synthesizer in C.
 
 # Quick start
 Depends on [SDL2](https://www.libsdl.org/index.php)
